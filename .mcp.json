@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "design-mcp": {
+      "type": "http",
+      "url": "https://sddsilidjhvtvejzvolx.supabase.co/functions/v1/mcp"
+    }
+  }
+}
