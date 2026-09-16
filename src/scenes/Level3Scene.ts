@@ -3,7 +3,8 @@ import { AssetKeys } from '../config/assetKeys';
 import { GAME_HEIGHT } from '../config/constants';
 import { Player } from '../objects/Player';
 import { LaserGate } from '../objects/LaserGate';
-import { showMessagePanel, showMessageSequence } from '../objects/MessagePanel';
+import { showMessagePanel } from '../objects/MessagePanel';
+import { showCaptionSequence } from '../objects/CaptionBox';
 import { LivesHud } from '../objects/LivesHud';
 import { enablePause } from '../objects/Pausable';
 import { loseLife } from '../state/gameState';
@@ -213,11 +214,11 @@ export class Level3Scene extends Phaser.Scene {
   private playConfrontation(obraMaestra: Phaser.GameObjects.Image): void {
     this.player.setFlipX(true);
 
-    const standX = obraMaestra.x - 320;
+    const standX = obraMaestra.x - 520;
     const startX = this.cameras.main.worldView.x - 40;
 
     this.cameras.main.stopFollow();
-    this.cameras.main.pan(standX + 160, GAME_HEIGHT / 2, 900, 'Sine.easeInOut');
+    this.cameras.main.pan(standX + 260, GAME_HEIGHT / 2, 900, 'Sine.easeInOut');
 
     const collector = this.add
       .image(startX, LEVEL3_GROUND_Y, AssetKeys.Collector)
@@ -249,11 +250,11 @@ export class Level3Scene extends Phaser.Scene {
   }
 
   private openConfrontationDialogue(collector: Phaser.GameObjects.Image): void {
-    showMessageSequence(
+    showCaptionSequence(
       this,
       [
-        'El Coleccionista:\nEsas obras eran mías. Las reuní para que nadie más las tocara.',
-        'Lienzo:\nNunca lo fueron. El arte no se puede poseer... solo se puede sentir.',
+        'El Coleccionista:\n¿Qué has hecho? Esas obras eran mías. Las saqué del mundo para guardarlas.',
+        'Lienzo:\nPor eso esta bóveda se sentía vacía. El arte no vive encerrado.',
       ],
       () => this.dropBriefcase(collector),
     );
