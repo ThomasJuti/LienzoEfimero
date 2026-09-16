@@ -1,5 +1,5 @@
 export const AssetKeys = {
-  TitleVideo: 'title-video',
+  Title: 'title',
   Vineta1: 'vineta-1',
   Vineta2: 'vineta-2',
   Vineta3: 'vineta-3',

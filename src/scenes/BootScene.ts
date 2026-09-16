@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { AssetKeys, WalkAnimKey, CrouchWalkAnimKey } from '../config/assetKeys';
 
-import titleVideoUrl from '../assets/cinematics/titulo-video.mp4';
+import titleUrl from '../assets/cinematics/titulo.png';
 import vineta1Url from '../assets/cinematics/vineta1-museo.png';
 import vineta2Url from '../assets/cinematics/vineta2-sombra.png';
 import vineta3Url from '../assets/cinematics/vineta3-porton.png';
@@ -40,7 +40,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   preload(): void {
-    this.load.video(AssetKeys.TitleVideo, titleVideoUrl, true);
+    this.load.image(AssetKeys.Title, titleUrl);
     this.load.image(AssetKeys.Vineta1, vineta1Url);
     this.load.image(AssetKeys.Vineta2, vineta2Url);
     this.load.image(AssetKeys.Vineta3, vineta3Url);
