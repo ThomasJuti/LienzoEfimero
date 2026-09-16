@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { AssetKeys } from '../config/assetKeys';
+import { AssetKeys, AudioKeys } from '../config/assetKeys';
 import { GAME_HEIGHT } from '../config/constants';
 import { Player } from '../objects/Player';
 import { SecurityCamera } from '../objects/SecurityCamera';
@@ -8,6 +8,7 @@ import { showMessagePanel } from '../objects/MessagePanel';
 import { LivesHud } from '../objects/LivesHud';
 import { enablePause } from '../objects/Pausable';
 import { loseLife } from '../state/gameState';
+import { playMusic, playSfx } from '../audio/gameAudio';
 
 const LEVEL_WIDTH = 2600;
 // This level's floor sits lower than the shared GROUND_Y — the gallery
@@ -110,6 +111,7 @@ export class Level2Scene extends Phaser.Scene {
 
     this.livesHud = new LivesHud(this);
     enablePause(this);
+    playMusic(this, AudioKeys.MusicGame);
 
     this.player.lock();
     showMessagePanel(
@@ -149,6 +151,7 @@ export class Level2Scene extends Phaser.Scene {
       return;
     }
     this.resetting = true;
+    playSfx(this, AudioKeys.Alert);
     const remaining = loseLife();
     this.livesHud.refresh();
 
@@ -181,6 +184,7 @@ export class Level2Scene extends Phaser.Scene {
 
     this.player.cast(600, () => {
       obra.setTexture(AssetKeys.ObraInspiracionColor);
+      playSfx(this, AudioKeys.Confirm);
       showMessagePanel(this, 'Has devuelto la Inspiración', () => {
         this.cameras.main.fadeOut(400, 0, 0, 0);
         this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {

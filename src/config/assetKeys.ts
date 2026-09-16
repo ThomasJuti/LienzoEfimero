@@ -38,6 +38,20 @@ export const AssetKeys = {
   Spark: 'spark',
 } as const;
 
+export const AudioKeys = {
+  MusicTitle: 'music-title',
+  MusicGame: 'music-game',
+  MusicEnding: 'music-ending',
+  Step: 'sfx-step',
+  Land: 'sfx-land',
+  Restore: 'sfx-restore',
+  Hurt: 'sfx-hurt',
+  Click: 'sfx-click',
+  Briefcase: 'sfx-briefcase',
+  Alert: 'sfx-alert',
+  Confirm: 'sfx-confirm',
+} as const;
+
 export const WalkAnimKey = 'lienzo-walk-cycle';
 export const CrouchWalkAnimKey = 'lienzo-crouch-walk-cycle';
 export const TitleAnimKey = 'title-loop';

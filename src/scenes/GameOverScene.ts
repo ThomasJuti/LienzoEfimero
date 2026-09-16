@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/constants';
 import { resetLives } from '../state/gameState';
+import { AudioKeys } from '../config/assetKeys';
+import { playSfx } from '../audio/gameAudio';
 
 export class GameOverScene extends Phaser.Scene {
   constructor() {
@@ -40,6 +42,7 @@ export class GameOverScene extends Phaser.Scene {
     retry.on('pointerover', () => retry.setScale(1.05));
     retry.on('pointerout', () => retry.setScale(1));
     retry.once('pointerdown', () => {
+      playSfx(this, AudioKeys.Click);
       resetLives();
       this.cameras.main.fadeOut(300, 0, 0, 0);
       this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {

@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { AssetKeys, WalkAnimKey, CrouchWalkAnimKey } from '../config/assetKeys';
+import { AssetKeys, AudioKeys, WalkAnimKey, CrouchWalkAnimKey } from '../config/assetKeys';
+import { playSfx } from '../audio/gameAudio';
 import {
   GRAVITY_Y,
   JUMP_VELOCITY,
@@ -34,6 +35,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   private locked = false;
   private facingLeft = false;
   private jumpsUsed = 0;
+  private wasAirborne = false;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, AssetKeys.LienzoActions, 'idle');
@@ -71,6 +73,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       altUp: keyboard.addKey(codes.W),
       altDown: keyboard.addKey(codes.S),
     };
+
+    this.on(Phaser.Animations.Events.ANIMATION_UPDATE, (_anim: Phaser.Animations.Animation, frame: Phaser.Animations.AnimationFrame) => {
+      if (frame.index === 1 || frame.index === 3) {
+        playSfx(this.scene, AudioKeys.Step, { volume: 0.14 });
+      }
+    });
   }
 
   get isCrouching(): boolean {
@@ -158,6 +166,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       this.jumpsUsed += 1;
     }
 
+    if (this.wasAirborne && onGround) {
+      playSfx(this.scene, AudioKeys.Land, { volume: 0.22 });
+    }
+    this.wasAirborne = !onGround;
+
     this.setFlipX(this.facingLeft);
     this.updateVisual(onGround);
   }
@@ -219,6 +232,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.anims.stop();
     this.setTexture(AssetKeys.LienzoActions, 'cast');
     this.applyBodySize();
+    playSfx(this.scene, AudioKeys.Restore, { volume: 0.35 });
     this.scene.time.delayedCall(holdMs, () => {
       this.locked = false;
       if (onComplete) {
@@ -236,6 +250,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.setTexture(AssetKeys.LienzoActions, 'hurt');
     this.applyBodySize();
     this.setTint(0xff8888);
+    playSfx(this.scene, AudioKeys.Hurt, { volume: 0.35 });
     this.scene.time.delayedCall(450, () => {
       this.clearTint();
       this.locked = false;

@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/constants';
+import { AudioKeys } from '../config/assetKeys';
+import { playSfx } from '../audio/gameAudio';
 
 /**
  * Bottom caption bar matching IntroScene / TransitionScene: a dim gold-stroked
@@ -49,6 +51,7 @@ export function showCaptionSequence(scene: Phaser.Scene, messages: string[], onD
     if (locked) {
       return;
     }
+    playSfx(scene, AudioKeys.Click);
     locked = true;
     index += 1;
     if (index >= messages.length) {

@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { AssetKeys } from '../config/assetKeys';
+import { AssetKeys, AudioKeys } from '../config/assetKeys';
 import { GAME_HEIGHT } from '../config/constants';
 import { Player } from '../objects/Player';
 import { LaserGate } from '../objects/LaserGate';
@@ -8,6 +8,7 @@ import { showCaptionSequence } from '../objects/CaptionBox';
 import { LivesHud } from '../objects/LivesHud';
 import { enablePause } from '../objects/Pausable';
 import { loseLife } from '../state/gameState';
+import { playMusic, playSfx } from '../audio/gameAudio';
 
 const LEVEL_WIDTH = 2800;
 // Same fix as Level 2: this background has no distinct floor band either, so
@@ -121,6 +122,7 @@ export class Level3Scene extends Phaser.Scene {
 
     this.livesHud = new LivesHud(this);
     enablePause(this);
+    playMusic(this, AudioKeys.MusicGame);
 
     this.player.lock();
     showMessagePanel(
@@ -182,6 +184,7 @@ export class Level3Scene extends Phaser.Scene {
 
   private playClimax(obraMaestra: Phaser.GameObjects.Image): void {
     this.player.lock();
+    playMusic(this, AudioKeys.MusicEnding);
 
     const rainbow = [0xff5da2, 0xffd23f, 0x3fd6ff, 0x7dff6b, 0xb06bff];
 
@@ -205,6 +208,7 @@ export class Level3Scene extends Phaser.Scene {
 
     this.time.delayedCall(500, () => {
       obraMaestra.setTexture(AssetKeys.ObraMaestraColor);
+      playSfx(this, AudioKeys.Confirm);
     });
 
     this.time.delayedCall(1800, () => this.playConfrontation(obraMaestra));
@@ -262,6 +266,7 @@ export class Level3Scene extends Phaser.Scene {
 
   private dropBriefcase(collector: Phaser.GameObjects.Image): void {
     collector.setTexture(AssetKeys.CollectorEmpty);
+    playSfx(this, AudioKeys.Briefcase, { volume: 0.38 });
 
     const briefcase = this.add
       .image(collector.x + 52, collector.y - 118, AssetKeys.Briefcase)

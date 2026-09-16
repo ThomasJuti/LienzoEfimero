@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { AssetKeys, WalkAnimKey, CrouchWalkAnimKey, TitleAnimKey } from '../config/assetKeys';
+import { AssetKeys, AudioKeys, WalkAnimKey, CrouchWalkAnimKey, TitleAnimKey } from '../config/assetKeys';
 
 import titleSheetUrl from '../assets/cinematics/titulo-sheet.png';
 import vineta1Url from '../assets/cinematics/vineta1-museo.png';
@@ -35,6 +35,18 @@ import securityCameraUrl from '../assets/sprites/props/camara-seguridad.png';
 import laserHazardsUrl from '../assets/sprites/props/laser-hazards.png';
 
 import messageFrameUrl from '../assets/ui/marco-mensaje.png';
+
+import musicTitleUrl from '../assets/audio/music-title.mp3';
+import musicGameUrl from '../assets/audio/music-game.mp3';
+import musicEndingUrl from '../assets/audio/music-ending.mp3';
+import sfxStepUrl from '../assets/audio/sfx-step.ogg';
+import sfxLandUrl from '../assets/audio/sfx-land.ogg';
+import sfxRestoreUrl from '../assets/audio/sfx-restore.ogg';
+import sfxHurtUrl from '../assets/audio/sfx-hurt.ogg';
+import sfxClickUrl from '../assets/audio/sfx-click.ogg';
+import sfxBriefcaseUrl from '../assets/audio/sfx-briefcase.ogg';
+import sfxAlertUrl from '../assets/audio/sfx-alert.ogg';
+import sfxConfirmUrl from '../assets/audio/sfx-confirm.ogg';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -76,6 +88,18 @@ export class BootScene extends Phaser.Scene {
     this.load.image(AssetKeys.LaserHazards, laserHazardsUrl);
 
     this.load.image(AssetKeys.MessageFrame, messageFrameUrl);
+
+    this.load.audio(AudioKeys.MusicTitle, musicTitleUrl);
+    this.load.audio(AudioKeys.MusicGame, musicGameUrl);
+    this.load.audio(AudioKeys.MusicEnding, musicEndingUrl);
+    this.load.audio(AudioKeys.Step, sfxStepUrl);
+    this.load.audio(AudioKeys.Land, sfxLandUrl);
+    this.load.audio(AudioKeys.Restore, sfxRestoreUrl);
+    this.load.audio(AudioKeys.Hurt, sfxHurtUrl);
+    this.load.audio(AudioKeys.Click, sfxClickUrl);
+    this.load.audio(AudioKeys.Briefcase, sfxBriefcaseUrl);
+    this.load.audio(AudioKeys.Alert, sfxAlertUrl);
+    this.load.audio(AudioKeys.Confirm, sfxConfirmUrl);
   }
 
   create(): void {

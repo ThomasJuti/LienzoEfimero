@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { AssetKeys } from '../config/assetKeys';
+import { AssetKeys, AudioKeys } from '../config/assetKeys';
+import { playSfx } from '../audio/gameAudio';
 
 /**
  * Shows a full-screen dim overlay with the marco-mensaje frame and a centered
@@ -45,6 +46,7 @@ export function showMessagePanel(scene: Phaser.Scene, message: string, onDismiss
     .setAlpha(0.85);
 
   const dismiss = (): void => {
+    playSfx(scene, AudioKeys.Click);
     overlay.destroy();
     frame.destroy();
     text.destroy();

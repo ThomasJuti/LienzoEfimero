@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/constants';
+import { setMusicPaused } from '../audio/gameAudio';
 
 interface PauseSceneData {
   parentKey: string;
@@ -18,6 +19,7 @@ export class PauseScene extends Phaser.Scene {
   }
 
   create(): void {
+    setMusicPaused(true);
     this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.6);
 
     this.add
@@ -37,6 +39,7 @@ export class PauseScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     const resume = (): void => {
+      setMusicPaused(false);
       this.scene.stop();
       this.scene.resume(this.parentKey);
     };

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
-import { AssetKeys } from '../config/assetKeys';
+import { AssetKeys, AudioKeys } from '../config/assetKeys';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/constants';
+import { playSfx } from '../audio/gameAudio';
 
 interface Slide {
   texture: string;
@@ -81,6 +82,7 @@ export class IntroScene extends Phaser.Scene {
       return;
     }
     this.advancing = true;
+    playSfx(this, AudioKeys.Click);
 
     this.cameras.main.fadeOut(250, 0, 0, 0);
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {

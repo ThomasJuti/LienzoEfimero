@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
-import { AssetKeys } from '../config/assetKeys';
+import { AssetKeys, AudioKeys } from '../config/assetKeys';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/constants';
+import { playMusic, playSfx, stopMusic } from '../audio/gameAudio';
 
 const EPILOGUE_TEXT =
   'En el vacío de su bóveda, El Coleccionista comprendió la verdad. El arte no se puede atrapar... solo se puede sentir.';
@@ -11,6 +12,8 @@ export class EpilogueScene extends Phaser.Scene {
   }
 
   create(): void {
+    playMusic(this, AudioKeys.MusicEnding);
+
     this.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, AssetKeys.Vineta5).setDisplaySize(GAME_WIDTH, GAME_HEIGHT);
 
     this.add
@@ -41,6 +44,8 @@ export class EpilogueScene extends Phaser.Scene {
     replay.on('pointerover', () => replay.setScale(1.05));
     replay.on('pointerout', () => replay.setScale(1));
     replay.once('pointerdown', () => {
+      playSfx(this, AudioKeys.Click);
+      stopMusic();
       this.cameras.main.fadeOut(300, 0, 0, 0);
       this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
         this.scene.start('TitleScene');

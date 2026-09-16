@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
-import { AssetKeys, TitleAnimKey } from '../config/assetKeys';
+import { AssetKeys, AudioKeys, TitleAnimKey } from '../config/assetKeys';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/constants';
 import { resetLives } from '../state/gameState';
+import { playMusic, playSfx } from '../audio/gameAudio';
 
 /**
  * Looping title card (GIF converted to a 20-frame spritesheet) with a painted
@@ -28,6 +29,8 @@ export class TitleScene extends Phaser.Scene {
     button.on('pointerover', () => this.tweens.add({ targets: button, scale: 1.04, duration: 120 }));
     button.on('pointerout', () => this.tweens.add({ targets: button, scale: 1, duration: 120 }));
     button.once('pointerdown', () => {
+      playSfx(this, AudioKeys.Click);
+      playMusic(this, AudioKeys.MusicTitle);
       this.cameras.main.fadeOut(300, 0, 0, 0);
       this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
         this.scene.start('IntroScene');

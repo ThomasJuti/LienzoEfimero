@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
-import { AssetKeys } from '../config/assetKeys';
+import { AssetKeys, AudioKeys } from '../config/assetKeys';
 import { GAME_HEIGHT } from '../config/constants';
 import { Player } from '../objects/Player';
 import { showMessagePanel } from '../objects/MessagePanel';
 import { LivesHud } from '../objects/LivesHud';
 import { enablePause } from '../objects/Pausable';
+import { playMusic, playSfx } from '../audio/gameAudio';
 
 const LEVEL_WIDTH = 1900;
 const CRATE_SCALE = 0.24;
@@ -89,6 +90,7 @@ export class Level1Scene extends Phaser.Scene {
 
     new LivesHud(this);
     enablePause(this);
+    playMusic(this, AudioKeys.MusicGame);
 
     this.player.lock();
     showMessagePanel(
@@ -110,6 +112,7 @@ export class Level1Scene extends Phaser.Scene {
 
     this.player.cast(600, () => {
       obra.setTexture(AssetKeys.ObraMemoriaColor);
+      playSfx(this, AudioKeys.Confirm);
       showMessagePanel(this, 'Has devuelto la Memoria', () => {
         this.cameras.main.fadeOut(400, 0, 0, 0);
         this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
