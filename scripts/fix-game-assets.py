@@ -82,10 +82,33 @@ def flood_background(mask: np.ndarray) -> np.ndarray:
     return vis
 
 
+def punch_interior_chroma(arr: np.ndarray) -> np.ndarray:
+    """Drop leftover chroma islands that never touch the image border (armpits, boot specks)."""
+    opaque = arr[:, :, 3] > 8
+    holes = is_chroma(arr[:, :, :3]) & opaque
+    out = arr.copy()
+    out[holes, 3] = 0
+    # Despill pixels that now border a punched hole.
+    h, w = holes.shape
+    neigh = np.zeros((h, w), dtype=bool)
+    neigh[1:, :] |= holes[:-1, :]
+    neigh[:-1, :] |= holes[1:, :]
+    neigh[:, 1:] |= holes[:, :-1]
+    neigh[:, :-1] |= holes[:, 1:]
+    edge = neigh & (out[:, :, 3] > 8) & ~holes
+    r = out[:, :, 0].astype(np.int16)
+    g = out[:, :, 1].astype(np.int16)
+    b = out[:, :, 2].astype(np.int16)
+    cap = np.maximum(r, b)
+    g = np.where(edge & (g > cap), cap, g)
+    out[:, :, 1] = np.clip(g, 0, 255).astype(np.uint8)
+    return out
+
+
 def chroma_to_alpha(im: Image.Image) -> Image.Image:
     rgb = np.asarray(im.convert("RGB"))
     keyed = is_chroma(rgb)
-    bg = flood_background(keyed)
+    bg = flood_background(keyed) | keyed
     h, w = bg.shape
     edge = np.zeros((h, w), dtype=bool)
     edge[1:, :] |= bg[:-1, :]
