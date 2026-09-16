@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
-import { AssetKeys, WalkAnimKey, CrouchWalkAnimKey } from '../config/assetKeys';
+import { AssetKeys, WalkAnimKey, CrouchWalkAnimKey, TitleAnimKey } from '../config/assetKeys';
 
-import titleUrl from '../assets/cinematics/titulo.png';
+import titleSheetUrl from '../assets/cinematics/titulo-sheet.png';
 import vineta1Url from '../assets/cinematics/vineta1-museo.png';
 import vineta2Url from '../assets/cinematics/vineta2-sombra.png';
 import vineta3Url from '../assets/cinematics/vineta3-porton.png';
@@ -42,7 +42,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   preload(): void {
-    this.load.image(AssetKeys.Title, titleUrl);
+    this.load.spritesheet(AssetKeys.Title, titleSheetUrl, { frameWidth: 832, frameHeight: 468 });
     this.load.image(AssetKeys.Vineta1, vineta1Url);
     this.load.image(AssetKeys.Vineta2, vineta2Url);
     this.load.image(AssetKeys.Vineta3, vineta3Url);
@@ -116,6 +116,14 @@ export class BootScene extends Phaser.Scene {
     // the original's stride contrast read as sliding at in-game scale.
     // AssetKeys.LienzoWalk (row 0) itself is unused now; its row 1 frames
     // (crouch/takeoff/apex/land) are still used directly via setPose().
+    if (!this.anims.exists(TitleAnimKey)) {
+      this.anims.create({
+        key: TitleAnimKey,
+        frames: this.anims.generateFrameNumbers(AssetKeys.Title, { start: 0, end: 19 }),
+        frameRate: 10,
+        repeat: -1,
+      });
+    }
     if (!this.anims.exists(WalkAnimKey)) {
       this.anims.create({
         key: WalkAnimKey,

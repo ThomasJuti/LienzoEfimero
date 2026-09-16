@@ -40,3 +40,4 @@ export const AssetKeys = {
 
 export const WalkAnimKey = 'lienzo-walk-cycle';
 export const CrouchWalkAnimKey = 'lienzo-crouch-walk-cycle';
+export const TitleAnimKey = 'title-loop';

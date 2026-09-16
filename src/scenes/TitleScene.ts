@@ -1,12 +1,12 @@
 import Phaser from 'phaser';
-import { AssetKeys } from '../config/assetKeys';
+import { AssetKeys, TitleAnimKey } from '../config/assetKeys';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/constants';
 import { resetLives } from '../state/gameState';
 
 /**
- * Static title card with the "LIENZO EFÍMERO" logo and a painted "JUGAR"
- * plaque. An invisible hotspot sits over that plaque so a click starts
- * the intro.
+ * Looping title card (GIF converted to a 20-frame spritesheet) with a painted
+ * "JUGAR" plaque. An invisible hotspot sits over that plaque so a click
+ * starts the intro.
  */
 export class TitleScene extends Phaser.Scene {
   constructor() {
@@ -16,7 +16,10 @@ export class TitleScene extends Phaser.Scene {
   create(): void {
     resetLives();
 
-    this.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, AssetKeys.Title).setDisplaySize(GAME_WIDTH, GAME_HEIGHT);
+    this.add
+      .sprite(GAME_WIDTH / 2, GAME_HEIGHT / 2, AssetKeys.Title)
+      .setDisplaySize(GAME_WIDTH, GAME_HEIGHT)
+      .play(TitleAnimKey);
 
     const button = this.add
       .rectangle(640, 690, 240, 56, 0x000000, 0)
