@@ -3,7 +3,7 @@ import { AssetKeys } from '../config/assetKeys';
 import { GAME_HEIGHT } from '../config/constants';
 import { Player } from '../objects/Player';
 import { LaserGate } from '../objects/LaserGate';
-import { showMessagePanel } from '../objects/MessagePanel';
+import { showMessagePanel, showMessageSequence } from '../objects/MessagePanel';
 import { LivesHud } from '../objects/LivesHud';
 import { enablePause } from '../objects/Pausable';
 import { loseLife } from '../state/gameState';
@@ -24,6 +24,13 @@ const DUCK_Y = LEVEL3_GROUND_Y - 110;
 // entirely — defeating the "wait for it to turn off" mechanic. Spanning the
 // full height makes that geometrically impossible regardless of jump count.
 const GATE_TOP_Y = 10;
+
+// Collector art is a 1024 canvas with ~918px of standing figure; this scale
+// puts him a head taller than Lienzo so he reads as the adult in the vault.
+const COLLECTOR_SCALE = 0.22;
+const COLLECTOR_FEET_ORIGIN_Y = 960 / 1024;
+const BRIEFCASE_SCALE = 0.12;
+const BRIEFCASE_FEET_ORIGIN_Y = 702 / 1024;
 
 export class Level3Scene extends Phaser.Scene {
   private player!: Player;
@@ -173,6 +180,8 @@ export class Level3Scene extends Phaser.Scene {
   }
 
   private playClimax(obraMaestra: Phaser.GameObjects.Image): void {
+    this.player.lock();
+
     const rainbow = [0xff5da2, 0xffd23f, 0x3fd6ff, 0x7dff6b, 0xb06bff];
 
     const burst = this.add.particles(obraMaestra.x, obraMaestra.y - 90, AssetKeys.Spark, {
@@ -197,11 +206,84 @@ export class Level3Scene extends Phaser.Scene {
       obraMaestra.setTexture(AssetKeys.ObraMaestraColor);
     });
 
-    this.time.delayedCall(1900, () => {
-      this.cameras.main.fadeOut(700, 255, 255, 255);
-      this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-        this.scene.start('EpilogueScene');
-      });
+    this.time.delayedCall(1800, () => this.playConfrontation(obraMaestra));
+  }
+
+  /** Collector walks in with the briefcase, talks, then drops it before the epilogue. */
+  private playConfrontation(obraMaestra: Phaser.GameObjects.Image): void {
+    this.player.setFlipX(true);
+
+    const standX = obraMaestra.x - 320;
+    const startX = this.cameras.main.worldView.x - 40;
+
+    this.cameras.main.stopFollow();
+    this.cameras.main.pan(standX + 160, GAME_HEIGHT / 2, 900, 'Sine.easeInOut');
+
+    const collector = this.add
+      .image(startX, LEVEL3_GROUND_Y, AssetKeys.Collector)
+      .setOrigin(0.5, COLLECTOR_FEET_ORIGIN_Y)
+      .setScale(COLLECTOR_SCALE)
+      .setDepth(9)
+      .setFlipX(true);
+
+    this.tweens.add({
+      targets: collector,
+      y: LEVEL3_GROUND_Y - 7,
+      duration: 180,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    });
+
+    this.tweens.add({
+      targets: collector,
+      x: standX,
+      duration: 2200,
+      ease: 'Sine.easeOut',
+      onComplete: () => {
+        this.tweens.killTweensOf(collector);
+        collector.y = LEVEL3_GROUND_Y;
+        this.openConfrontationDialogue(collector);
+      },
+    });
+  }
+
+  private openConfrontationDialogue(collector: Phaser.GameObjects.Image): void {
+    showMessageSequence(
+      this,
+      [
+        'El Coleccionista:\nEsas obras eran mías. Las reuní para que nadie más las tocara.',
+        'Lienzo:\nNunca lo fueron. El arte no se puede poseer... solo se puede sentir.',
+      ],
+      () => this.dropBriefcase(collector),
+    );
+  }
+
+  private dropBriefcase(collector: Phaser.GameObjects.Image): void {
+    collector.setTexture(AssetKeys.CollectorEmpty);
+
+    const briefcase = this.add
+      .image(collector.x + 52, collector.y - 118, AssetKeys.Briefcase)
+      .setOrigin(0.5, BRIEFCASE_FEET_ORIGIN_Y)
+      .setScale(BRIEFCASE_SCALE)
+      .setDepth(11)
+      .setFlipX(true);
+
+    this.tweens.add({
+      targets: briefcase,
+      x: collector.x + 118,
+      y: LEVEL3_GROUND_Y,
+      angle: 16,
+      duration: 520,
+      ease: 'Bounce.easeOut',
+      onComplete: () => {
+        this.time.delayedCall(800, () => {
+          this.cameras.main.fadeOut(800, 255, 255, 255);
+          this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+            this.scene.start('EpilogueScene');
+          });
+        });
+      },
     });
   }
 

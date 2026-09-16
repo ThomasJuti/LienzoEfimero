@@ -14,6 +14,8 @@ ROOT = Path(__file__).resolve().parents[1] / "src" / "assets"
 CHROMA_PATHS = [
     "sprites/lienzo-spritesheet.png",
     "sprites/the-collector-sprite.png",
+    "sprites/the-collector-empty.png",
+    "sprites/props/maletin.png",
     "sprites/lienzo-idle-restaurar-hurt.png",
     "sprites/props/caja-madera.png",
     "sprites/props/camara-seguridad.png",

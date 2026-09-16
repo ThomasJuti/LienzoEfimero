@@ -26,6 +26,8 @@ export const AssetKeys = {
   LienzoCrouchWalk: 'lienzo-crouch-walk',
   LienzoActions: 'lienzo-actions',
   Collector: 'the-collector',
+  CollectorEmpty: 'the-collector-empty',
+  Briefcase: 'maletin',
 
   Crate: 'caja-madera',
   SecurityCamera: 'security-camera',

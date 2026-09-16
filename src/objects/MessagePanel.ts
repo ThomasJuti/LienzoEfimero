@@ -54,3 +54,17 @@ export function showMessagePanel(scene: Phaser.Scene, message: string, onDismiss
 
   overlay.once('pointerdown', dismiss);
 }
+
+/** Plays several message panels in order. A short gap between them avoids one click dismissing two. */
+export function showMessageSequence(scene: Phaser.Scene, messages: string[], onDone: () => void): void {
+  const next = (index: number): void => {
+    if (index >= messages.length) {
+      onDone();
+      return;
+    }
+    showMessagePanel(scene, messages[index], () => {
+      scene.time.delayedCall(90, () => next(index + 1));
+    });
+  };
+  next(0);
+}

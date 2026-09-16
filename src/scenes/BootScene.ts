@@ -27,6 +27,8 @@ import lienzoWalkV2Url from '../assets/sprites/lienzo-walk-cycle-v2.png';
 import lienzoCrouchWalkUrl from '../assets/sprites/lienzo-crouch-walk.png';
 import lienzoActionsUrl from '../assets/sprites/lienzo-idle-restaurar-hurt.png';
 import collectorUrl from '../assets/sprites/the-collector-sprite.png';
+import collectorEmptyUrl from '../assets/sprites/the-collector-empty.png';
+import briefcaseUrl from '../assets/sprites/props/maletin.png';
 
 import crateUrl from '../assets/sprites/props/caja-madera.png';
 import securityCameraUrl from '../assets/sprites/props/camara-seguridad.png';
@@ -66,6 +68,8 @@ export class BootScene extends Phaser.Scene {
     this.load.spritesheet(AssetKeys.LienzoCrouchWalk, lienzoCrouchWalkUrl, { frameWidth: 256, frameHeight: 512 });
     this.load.image(AssetKeys.LienzoActions, lienzoActionsUrl);
     this.load.image(AssetKeys.Collector, collectorUrl);
+    this.load.image(AssetKeys.CollectorEmpty, collectorEmptyUrl);
+    this.load.image(AssetKeys.Briefcase, briefcaseUrl);
 
     this.load.image(AssetKeys.Crate, crateUrl);
     this.load.spritesheet(AssetKeys.SecurityCamera, securityCameraUrl, { frameWidth: 512, frameHeight: 512 });
